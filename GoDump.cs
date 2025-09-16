@@ -51,7 +51,7 @@ namespace GoDump
         {
             if (Input.GetKeyDown(KeyCode.F4))
             {
-                var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
+                var animation = GameObject.Find("_GameCameras/HudCamera/In-game/Anchor TL/Hud Canvas Offset/Hud Canvas/Health/Health 1").GetComponent<tk2dSpriteAnimator>().Library;
                 anims.Add(animation);
                 animNames = anims.Select(a => a.name).ToArray();
                 StartCoroutine(HornetSprite());
@@ -99,7 +99,7 @@ namespace GoDump
                     foreach (tk2dSpriteAnimationClip clip in animL.clips)
                     {
                         Logger.LogInfo(clip.name);
-                        //if (clip.name == "SlashAlt")
+                        //if (clip.name == "Health Refill")
                         //    break;
 
                         i++;
@@ -129,9 +129,13 @@ namespace GoDump
                             j++;
 
                             if (clip.name == "")
-                            {
-                                clip.name = "Focus Air";
-                            }
+                                continue;
+
+
+                            //if (clip.name == "")
+                            //{
+                            //    clip.name = "Focus Air";
+                            //}
 
                             tk2dSpriteDefinition tk2DSpriteDefinition = frame.spriteCollection.spriteDefinitions[frame.spriteId];
                             Vector2[] uv = tk2DSpriteDefinition.uvs;
@@ -139,7 +143,7 @@ namespace GoDump
                             Texture texture = tk2DSpriteDefinition.material.mainTexture;
                             Texture2D texture2D = SpriteDump.TextureReadHack((Texture2D)texture);
 
-                            string collectionname = frame.spriteCollection.spriteCollectionName + "_" + tk2DSpriteDefinition.material.mainTexture.name;
+                            string collectionname = tk2DSpriteDefinition.material.mainTexture.name;
                             string path = _spritePath + animL.name + "/0.Atlases/" + collectionname + ".png";
                             string path0 = _spritePath + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + collectionname + ".png";
                             string path1 = _spritePath + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + String.Format("{0:D3}", i) + "-" + String.Format("{0:D2}", j) + "-" + String.Format("{0:D3}", frame.spriteId) + "_position.png";
