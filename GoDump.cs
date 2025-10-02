@@ -54,7 +54,7 @@ namespace GoDump
         {
             if (Input.GetKeyDown(KeyCode.F4))
             {
-                var animation = GameObject.Find("_GameCameras/HudCamera/In-game/Anchor TL/Hud Canvas Offset/Hud Canvas/Health/Health 1").GetComponent<tk2dSpriteAnimator>().Library;
+                var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
                 anims.Add(animation);
                 animNames = anims.Select(a => a.name).ToArray();
                 StartCoroutine(HornetSprite());
@@ -62,6 +62,12 @@ namespace GoDump
 
             if (Input.GetKeyDown(KeyCode.F5))
             {
+                foreach(var x in Resources.FindObjectsOfTypeAll<tk2dSpriteAnimation>())
+                {
+                    Logger.LogInfo(x.name);
+                }
+
+                return;
                 //Texture2D texture = new Texture2D(2, 2);
                 //byte[] fileData = File.ReadAllBytes("C:\\Users\\a0936\\AppData\\LocalLow\\Team Cherry\\testPack\\Knight\\Knight_atlas2.png");
                 //ImageConversion.LoadImage(texture, fileData); // Explicitly call from ImageConversion
@@ -323,6 +329,19 @@ namespace GoDump
                 }
             }
             return used;
+        }
+
+        private tk2dSpriteAnimation getAnimation(string name)
+        {
+            tk2dSpriteAnimation anim = null;
+            foreach (var x in Resources.FindObjectsOfTypeAll<tk2dSpriteAnimation>())
+            {
+                //Logger.LogInfo(x.name);
+                if (x.name == name)
+                    anim = x;
+            }
+
+            return anim;
         }
 
         public static void logInfo(string msg)
