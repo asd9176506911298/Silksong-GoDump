@@ -12,6 +12,7 @@ using static GODump.SpriteDump;
 using System.IO;
 using System.Reflection;
 using BepInEx.Logging;
+using BepInEx.Configuration;
 
 namespace GoDump
 {
@@ -34,12 +35,16 @@ namespace GoDump
         private string[] animNames;
         private int num;
 
+        private ConfigEntry<string> dumpAnimName;   
+
         private string currClipAndId = "";
 
         private void Awake()
         {
             // Plugin startup logic
             Logger.LogInfo($"Plugin {modGUID} is loaded!");
+
+            dumpAnimName = Config.Bind("", "dumpAnimName", "");
         }
 
         private void Start()
@@ -56,7 +61,7 @@ namespace GoDump
             if (Input.GetKeyDown(KeyCode.F4))
             {
                 //var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
-                var animation = getAnimation("Hornet CrestWeapon Dagger Anim");
+                var animation = getAnimation(dumpAnimName.Value);
                 anims.Add(animation);
                 animNames = anims.Select(a => a.name).ToArray();
                 StartCoroutine(HornetSprite());
