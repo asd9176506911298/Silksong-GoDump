@@ -27,10 +27,13 @@ namespace GoDump
         private static readonly string _spritePath = Application.persistentDataPath + "/sprites/";
         private static readonly string _atlasPath = Application.persistentDataPath + "/atlases/";
 
+
         private List<tk2dSpriteCollectionData> clns;
         private List<tk2dSpriteAnimation> anims;
         private string[] animNames;
         private int num;
+
+        private string currClipAndId = "";
 
         private void Awake()
         {
@@ -81,7 +84,12 @@ namespace GoDump
             {
                 if (HeroController.instance.GetComponent<tk2dSpriteAnimator>())
                 {
-                    //Logger.LogInfo(HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name);
+                    //var newClipAndId = HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name + HeroController.instance.GetComponent<tk2dSprite>().spriteId;
+                    //if (currClipAndId != newClipAndId)
+                    //{
+                    //    currClipAndId = newClipAndId;
+                    //    Logger.LogInfo(newClipAndId);
+                    //}
                 }
             }       
         }
