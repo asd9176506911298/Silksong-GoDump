@@ -30,6 +30,7 @@ namespace GoDump
 
         private List<tk2dSpriteCollectionData> clns;
         private List<tk2dSpriteAnimation> anims;
+        private tk2dSpriteAnimation anim = null;
         private string[] animNames;
         private int num;
 
@@ -54,7 +55,8 @@ namespace GoDump
         {
             if (Input.GetKeyDown(KeyCode.F4))
             {
-                var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
+                //var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
+                var animation = getAnimation("Hornet CrestWeapon Dagger Anim");
                 anims.Add(animation);
                 animNames = anims.Select(a => a.name).ToArray();
                 StartCoroutine(HornetSprite());
@@ -333,7 +335,6 @@ namespace GoDump
 
         private tk2dSpriteAnimation getAnimation(string name)
         {
-            tk2dSpriteAnimation anim = null;
             foreach (var x in Resources.FindObjectsOfTypeAll<tk2dSpriteAnimation>())
             {
                 //Logger.LogInfo(x.name);
