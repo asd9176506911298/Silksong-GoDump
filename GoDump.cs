@@ -35,7 +35,7 @@ namespace GoDump
         private string[] animNames;
         private int num;
 
-        private ConfigEntry<string> dumpAnimName;   
+        private ConfigEntry<string> dumpAnimName;
 
         private string currClipAndId = "";
 
@@ -60,6 +60,8 @@ namespace GoDump
         {
             if (Input.GetKeyDown(KeyCode.F4))
             {
+                clns.Clear();
+                anims.Clear();
                 //var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
                 var animation = getAnimation(dumpAnimName.Value);
                 anims.Add(animation);
