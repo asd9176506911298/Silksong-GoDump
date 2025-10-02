@@ -164,7 +164,7 @@ namespace GoDump
                             Texture texture = tk2DSpriteDefinition.material.mainTexture;
                             Texture2D texture2D = SpriteDump.TextureReadHack((Texture2D)texture);
 
-                            string collectionname = tk2DSpriteDefinition.material.mainTexture.name;
+                            string collectionname = frame.spriteCollection.spriteCollectionName + "_" + tk2DSpriteDefinition.material.mainTexture.name;
                             string path = _spritePath + animL.name + "/0.Atlases/" + collectionname + ".png";
                             string path0 = _spritePath + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + collectionname + ".png";
                             string path1 = _spritePath + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + String.Format("{0:D3}", i) + "-" + String.Format("{0:D2}", j) + "-" + String.Format("{0:D3}", frame.spriteId) + "_position.png";
