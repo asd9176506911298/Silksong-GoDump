@@ -24,6 +24,8 @@ namespace GoDump
         private const string modName = "GoDump";
         private const string modVersion = "1.0.0";
 
+        private string currClipAndId = "";
+
         private static readonly string _spritePath = Application.persistentDataPath + "/sprites/";
         private static readonly string _atlasPath = Application.persistentDataPath + "/atlases/";
 
@@ -51,7 +53,8 @@ namespace GoDump
         {
             if (Input.GetKeyDown(KeyCode.F4))
             {
-                var animation = GameObject.Find("_GameCameras/HudCamera/In-game/Anchor TL/Hud Canvas Offset/Hud Canvas/Health/Health 1").GetComponent<tk2dSpriteAnimator>().Library;
+                //var animation = GameObject.Find("_GameCameras/HudCamera/In-game/Anchor TL/Hud Canvas Offset/Hud Canvas/Health/Health 1").GetComponent<tk2dSpriteAnimator>().Library;
+                var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
                 anims.Add(animation);
                 animNames = anims.Select(a => a.name).ToArray();
                 StartCoroutine(HornetSprite());
@@ -69,7 +72,7 @@ namespace GoDump
 
                     Texture2D texture = new Texture2D(2, 2);
                     texture.name = x.mainTexture.name;
-                    byte[] fileData = File.ReadAllBytes($"C:\\Users\\a0936\\AppData\\LocalLow\\Team Cherry\\testPack\\Knight\\Knight_{x.mainTexture.name}.png");
+                    byte[] fileData = File.ReadAllBytes($"E:\\App\\testPack\\Knight\\{x.mainTexture.name}.png");
                     ImageConversion.LoadImage(texture, fileData); // Explicitly call from ImageConversion
 
                     Logger.LogInfo("SetTexture");
@@ -81,7 +84,14 @@ namespace GoDump
             {
                 if (HeroController.instance.GetComponent<tk2dSpriteAnimator>())
                 {
-                    //Logger.LogInfo(HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name);
+                    //var newClipAndId = HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name + HeroController.instance.GetComponent<tk2dSprite>().spriteId;
+                    //if (currClipAndId != newClipAndId)
+                    //{
+                    //    currClipAndId = newClipAndId;
+                    //    Logger.LogInfo(newClipAndId);
+                    //}
+
+                    
                 }
             }       
         }
@@ -99,8 +109,8 @@ namespace GoDump
                     foreach (tk2dSpriteAnimationClip clip in animL.clips)
                     {
                         Logger.LogInfo(clip.name);
-                        //if (clip.name == "Health Refill")
-                        //    break;
+                        if (clip.name == "HardLand")
+                            break;
 
                         i++;
                         int j = -1;
