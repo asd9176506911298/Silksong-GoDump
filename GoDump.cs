@@ -25,8 +25,8 @@ namespace GoDump
         private const string modName = "GoDump";
         private const string modVersion = "1.0.0";
 
-        private static readonly string _spritePath = Application.persistentDataPath + "/sprites/";
-        private static readonly string _atlasPath = Application.persistentDataPath + "/atlases/";
+        private static string _spritePath = "";
+        private static string _atlasPath = "";
 
 
         private List<tk2dSpriteCollectionData> clns;
@@ -36,6 +36,10 @@ namespace GoDump
         private int num;
 
         private ConfigEntry<string> dumpAnimName;
+        private ConfigEntry<string> exportPath;
+        private ConfigEntry<bool> logCurrentClipId;
+        private ConfigEntry<KeyCode> logClnKey;
+        private ConfigEntry<KeyCode> dumpClnKey;
 
         private string currClipAndId = "";
 
@@ -45,6 +49,10 @@ namespace GoDump
             Logger.LogInfo($"Plugin {modGUID} is loaded!");
 
             dumpAnimName = Config.Bind("", "dumpAnimName", "");
+            exportPath = Config.Bind("", "exportPath", "");
+            logCurrentClipId = Config.Bind("", "LogCurrentClipId", false);
+            logClnKey = Config.Bind("Key", "logClnKey", KeyCode.F3);
+            dumpClnKey = Config.Bind("Key", "dumpClnKey", KeyCode.F4);
         }
 
         private void Start()
@@ -58,8 +66,31 @@ namespace GoDump
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F4))
+            if(Input.GetKeyDown(logClnKey.Value))
             {
+                Logger.LogInfo("Log tk2dSpriteAnimation Start");
+                Logger.LogInfo("= = = = = = = = = = = = = = = =");
+                foreach (var x in Resources.FindObjectsOfTypeAll<tk2dSpriteAnimation>())
+                {
+                    Logger.LogInfo(x.name);
+                    
+                }
+                Logger.LogInfo("= = = = = = = = = = = = = = = =");
+                Logger.LogInfo("Log tk2dSpriteAnimation End");
+            }
+
+            if (Input.GetKeyDown(dumpClnKey.Value))
+            {
+                if (exportPath.Value == "")
+                {
+                    Logger.LogInfo($"export Path is Empty");
+                    return;
+                }
+                if (!Directory.Exists(exportPath.Value))
+                {
+                    Logger.LogInfo($"Export Path: {exportPath.Value} not exist");
+                    return;
+                }
                 clns.Clear();
                 anims.Clear();
                 //var animation = HeroController.instance.GetComponent<tk2dSpriteAnimator>().Library;
@@ -69,44 +100,18 @@ namespace GoDump
                 StartCoroutine(HornetSprite());
             }
 
-            if (Input.GetKeyDown(KeyCode.F5))
-            {
-                foreach(var x in Resources.FindObjectsOfTypeAll<tk2dSpriteAnimation>())
-                {
-                    Logger.LogInfo(x.name);
-                }
-
-                return;
-                //Texture2D texture = new Texture2D(2, 2);
-                //byte[] fileData = File.ReadAllBytes("C:\\Users\\a0936\\AppData\\LocalLow\\Team Cherry\\testPack\\Knight\\Knight_atlas2.png");
-                //ImageConversion.LoadImage(texture, fileData); // Explicitly call from ImageConversion
-                //HeroController.instance.GetComponent<tk2dSprite>().GetCurrentSpriteDef().material.mainTexture = texture;
-                foreach(var x in HeroController.instance.GetComponent<tk2dSprite>().Collection.materials)
-                {
-                    Logger.LogInfo(x.mainTexture.name);
-
-                    Texture2D texture = new Texture2D(2, 2);
-                    texture.name = x.mainTexture.name;
-                    byte[] fileData = File.ReadAllBytes($"C:\\Users\\a0936\\AppData\\LocalLow\\Team Cherry\\testPack\\Knight\\Knight_{x.mainTexture.name}.png");
-                    ImageConversion.LoadImage(texture, fileData); // Explicitly call from ImageConversion
-
-                    Logger.LogInfo("SetTexture");
-                    x.mainTexture = texture;
-                }
-            }
-
-            if (HeroController.instance)
+            if (HeroController.instance && logCurrentClipId.Value)
             {
                 if (HeroController.instance.GetComponent<tk2dSpriteAnimator>())
                 {
-                    //var newClipAndId = HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name + HeroController.instance.GetComponent<tk2dSprite>().spriteId;
-                    //if (currClipAndId != newClipAndId)
-                    //{
-                    //    currClipAndId = newClipAndId;
-                    //    Logger.LogInfo(newClipAndId);
-                    //}
+                    var newClipAndId = HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name + HeroController.instance.GetComponent<tk2dSprite>().spriteId;
+                    if (currClipAndId != newClipAndId)
+                    {
+                        currClipAndId = newClipAndId;
+                        Logger.LogInfo(newClipAndId);
+                    }
                 }
-            }       
+            }
         }
 
         private IEnumerator HornetSprite()
@@ -167,11 +172,11 @@ namespace GoDump
                             Texture2D texture2D = SpriteDump.TextureReadHack((Texture2D)texture);
 
                             string collectionname = frame.spriteCollection.spriteCollectionName + "_" + tk2DSpriteDefinition.material.mainTexture.name;
-                            string path = _spritePath + animL.name + "/0.Atlases/" + collectionname + ".png";
-                            string path0 = _spritePath + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + collectionname + ".png";
-                            string path1 = _spritePath + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + String.Format("{0:D3}", i) + "-" + String.Format("{0:D2}", j) + "-" + String.Format("{0:D3}", frame.spriteId) + "_position.png";
+                            string path = exportPath.Value + "/sprites/" + animL.name + "/0.Atlases/" + collectionname + ".png";
+                            string path0 = exportPath.Value + "/sprites/" + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + collectionname + ".png";
+                            string path1 = exportPath.Value + "/sprites/" + animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + String.Format("{0:D3}", i) + "-" + String.Format("{0:D2}", j) + "-" + String.Format("{0:D3}", frame.spriteId) + "_position.png";
                             string path2r = animL.name + "/" + String.Format("{0:D3}", i) + "." + clip.name + "/" + String.Format("{0:D3}", i) + "-" + String.Format("{0:D2}", j) + "-" + String.Format("{0:D3}", frame.spriteId) + ".png";
-                            string path2 = _spritePath + path2r;
+                            string path2 = exportPath.Value + "/sprites/" + path2r;
 
                             bool flipped = tk2DSpriteDefinition.flipped == tk2dSpriteDefinition.FlipMode.Tk2d;
 
@@ -296,7 +301,7 @@ namespace GoDump
                         //yield return new WaitForSeconds(1.0f);
                     }
 
-                    string spriteinfopath = _spritePath + animL.name + "/0.Atlases/SpriteInfo.json";
+                    string spriteinfopath = exportPath.Value + "/sprites/" + animL.name + "/0.Atlases/SpriteInfo.json";
                     if (!File.Exists(spriteinfopath) && true) // GODump.instance.GlobalSettings.DumpSpriteInfo
                     {
                         using (FileStream fileStream = File.Create(spriteinfopath))
