@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using BepInEx.Logging;
 using BepInEx.Configuration;
+using static AudioSourceMovingClips;
 
 namespace GoDump
 {
@@ -97,6 +98,114 @@ namespace GoDump
                 var animation = getAnimation(dumpAnimName.Value);
                 anims.Add(animation);
                 animNames = anims.Select(a => a.name).ToArray();
+
+                var slashframeList = new List<tk2dSpriteAnimationFrame>();
+                var slashAltframeList = new List<tk2dSpriteAnimationFrame>();
+
+                // slash
+                // 添加第一個（原本的第 0 個）
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[0].spriteCollection,
+                    spriteId = 47
+                });
+
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[0].spriteCollection,
+                    spriteId = 48
+                });
+
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[1].spriteCollection,
+                    spriteId = 49
+                });
+
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[2].spriteCollection,
+                    spriteId = 50
+                });
+
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[3].spriteCollection,
+                    spriteId = 850
+                });
+
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[4].spriteCollection,
+                    spriteId = 903
+                });
+
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[5].spriteCollection,
+                    spriteId = 850
+                });
+                slashframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[3].frames[6].spriteCollection,
+                    spriteId = 54
+                });
+
+                animation.clips[3].frames = slashframeList.ToArray();
+
+                // ------------------------------
+
+                // slash Alt 
+                // 添加第一個（原本的第 0 個）
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[0].spriteCollection,
+                    spriteId = 39
+                });
+
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[0].spriteCollection,
+                    spriteId = 40
+                });
+
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[1].spriteCollection,
+                    spriteId = 41
+                });
+
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[2].spriteCollection,
+                    spriteId = 42
+                });
+
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[3].spriteCollection,
+                    spriteId = 728
+                });
+
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[4].spriteCollection,
+                    spriteId = 907
+                });
+
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[5].spriteCollection,
+                    spriteId = 826
+                });
+                slashAltframeList.Add(new tk2dSpriteAnimationFrame
+                {
+                    spriteCollection = animation.clips[2].frames[6].spriteCollection,
+                    spriteId = 897
+                });
+
+                animation.clips[2].frames = slashAltframeList.ToArray();
+
                 StartCoroutine(HornetSprite());
             }
 
@@ -127,6 +236,7 @@ namespace GoDump
                     foreach (tk2dSpriteAnimationClip clip in animL.clips)
                     {
                         Logger.LogInfo(clip.name);
+
                         //if (clip.name == "Health Refill")
                         //    break;
 
@@ -156,8 +266,8 @@ namespace GoDump
                         {
                             j++;
 
-                            if (clip.name == "")
-                                continue;
+                            //if (clip.name == "")
+                            //    continue;
 
 
                             //if (clip.name == "")
@@ -166,6 +276,14 @@ namespace GoDump
                             //}
 
                             tk2dSpriteDefinition tk2DSpriteDefinition = frame.spriteCollection.spriteDefinitions[frame.spriteId];
+                            if(frame.spriteId == 48)
+                            {
+                                Logger.LogInfo(frame.spriteId);
+                                
+                            }
+                            Logger.LogInfo(tk2DSpriteDefinition.name);
+
+
                             Vector2[] uv = tk2DSpriteDefinition.uvs;
                             Vector3[] pos = tk2DSpriteDefinition.positions;
                             Texture texture = tk2DSpriteDefinition.material.mainTexture;
