@@ -40,6 +40,7 @@ namespace GoDump
         private ConfigEntry<bool> logCurrentClipId;
         private ConfigEntry<KeyCode> logClnKey;
         private ConfigEntry<KeyCode> dumpClnKey;
+        public ConfigEntry<bool> isDrawRectBorder;
 
         private string currClipAndId = "";
 
@@ -53,6 +54,7 @@ namespace GoDump
             logCurrentClipId = Config.Bind("", "LogCurrentClipId", false);
             logClnKey = Config.Bind("Key", "logClnKey", KeyCode.F3);
             dumpClnKey = Config.Bind("Key", "dumpClnKey", KeyCode.F4);
+            isDrawRectBorder = Config.Bind("", "isDrawRectBorder", true);
         }
 
         private void Start()
@@ -127,8 +129,8 @@ namespace GoDump
                     foreach (tk2dSpriteAnimationClip clip in animL.clips)
                     {
                         Logger.LogInfo(clip.name);
-                        //if (clip.name == "Health Refill")
-                        //    break;
+                        if (clip.name == "Dash")
+                            break;
 
                         i++;
                         int j = -1;

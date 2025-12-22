@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using GoDump;
+using System.IO;
 using UnityEngine;
 
 namespace GODump
@@ -53,7 +54,7 @@ namespace GODump
             Texture2D texture2D = new Texture2D(border.width, border.height);
             texture2D.SetPixels(colors);
             texture2D.SetPixels(rectP.x, rectP.y, rectP.width, rectP.height, in_tex.GetPixels());
-            if (true) // GODump.instance.GlobalSettings.RedRectangular
+            if (GoDump.GoDump.Instance.isDrawRectBorder.Value) // GODump.instance.GlobalSettings.RedRectangular
             {
                 for (int i = 0; i < texture2D.width; i++)
                 {
