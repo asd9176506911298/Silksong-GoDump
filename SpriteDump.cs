@@ -101,7 +101,7 @@ namespace GODump
             }
 
             texture2D.SetPixels(rectP.x, rectP.y, rectP.width, rectP.height, in_tex.GetPixels(0, 0, rectP.width, rectP.height));
-            if (true) // GODump.instance.GlobalSettings.RedRectangular
+            if (GoDump.GoDump.Instance.isDrawRectBorder.Value) // GODump.instance.GlobalSettings.RedRectangular
             {
                 for (int i = 0; i < texture2D.width; i++)
                 {
