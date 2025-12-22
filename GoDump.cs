@@ -129,8 +129,8 @@ namespace GoDump
                     foreach (tk2dSpriteAnimationClip clip in animL.clips)
                     {
                         Logger.LogInfo(clip.name);
-                        if (clip.name == "Dash")
-                            break;
+                        //if (clip.name == "Dash")
+                        //    break;
 
                         i++;
                         int j = -1;
