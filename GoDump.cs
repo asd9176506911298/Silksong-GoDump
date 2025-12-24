@@ -104,9 +104,27 @@ namespace GoDump
 
             if (HeroController.instance && logCurrentClipId.Value)
             {
-                if (HeroController.instance.GetComponent<tk2dSpriteAnimator>())
+                var hero = HeroController.instance;
+                var animator = hero.GetComponent<tk2dSpriteAnimator>();
+                var sprite = hero.GetComponent<tk2dSprite>(); // 建議先快取起來
+
+                if (animator != null && sprite != null)
                 {
-                    var newClipAndId = HeroController.instance.GetComponent<tk2dSpriteAnimator>().CurrentClip.name + HeroController.instance.GetComponent<tk2dSprite>().spriteId;
+                    var currentClip = animator.CurrentClip;
+
+                    // 如果沒有正在播放的動畫，直接返回或給予預設值
+                    if (currentClip == null) return;
+
+                    // 確保當前幀索引在合法範圍內
+                    int frameIdx = Math.Clamp(animator.CurrentFrame, 0, currentClip.frames.Length - 1);
+                    var frame = currentClip.frames[frameIdx];
+
+                    string collectionName = frame.spriteCollection != null ? frame.spriteCollection.name : "Unknown";
+                    string clipName = currentClip.name;
+                    int spriteId = sprite.spriteId;
+
+                    string newClipAndId = $"[{collectionName}] {clipName} (Frame: {frameIdx}, ID: {spriteId})";
+
                     if (currClipAndId != newClipAndId)
                     {
                         currClipAndId = newClipAndId;
